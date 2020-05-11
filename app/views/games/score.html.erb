@@ -1,0 +1,26 @@
+<h1>Result</h1>
+
+<% require 'json' %>
+<% require 'open-uri' %>
+
+<% url = "https://wagon-dictionary.herokuapp.com/#{@word}" %>
+<% user_serialized = open(url).read %>
+<% user = JSON.parse(user_serialized) %>
+
+  <% def letters_included %>
+    <% params[:word].chars.each { |letter| params[:letters].include?(letter) } %>
+  <% end %>
+
+  <p><%= letters_included() %></p>
+
+<% if !letters_included%>
+  <h3>Sorry, but <strong><%= @word.upcase  %></strong> can't be built out of ...</h3>
+<% elsif !user['found'] %>
+  <h3>YOUR ENGLISH SUCKS</h3>
+<% elsif user['found'] %>
+  <h3><strong>Congratulations! </strong><%= @word.upcase  %> is a valid English word!</h3>
+<% else %>
+  <h3>YOUR ENGL</h3>
+<% end %>
+
+<%= link_to 'Play Again!', new_path %>
